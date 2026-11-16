@@ -1,0 +1,100 @@
+/* ============================================================
+   Dashboard Analitik Apotek 2025
+   style.css — Custom styles (Tailwind CSS is the primary framework)
+   ============================================================ */
+
+/* ---------- Base font ---------- */
+body {
+  font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+}
+
+/* ---------- Section title ---------- */
+.section-title {
+  @apply text-base font-semibold text-slate-600 uppercase tracking-widest mb-3 pl-1;
+  border-left: 3px solid #3b82f6;
+  padding-left: 10px;
+}
+
+/* ---------- KPI Cards ---------- */
+.kpi-card {
+  @apply bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex flex-col gap-1
+         transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 cursor-default;
+}
+
+.kpi-icon {
+  @apply text-2xl leading-none mb-1;
+}
+
+.kpi-label {
+  @apply text-xs font-medium text-slate-500 uppercase tracking-wider;
+}
+
+.kpi-value {
+  @apply text-2xl font-bold text-slate-800 leading-tight tabular-nums;
+}
+
+.kpi-sub {
+  @apply text-xs text-slate-400 mt-0.5;
+}
+
+/* ---------- Chart Cards ---------- */
+.chart-card {
+  @apply bg-white rounded-2xl shadow-sm border border-slate-100 p-5
+         transition-all duration-200 hover:shadow-md;
+}
+
+.chart-title {
+  @apply text-sm font-semibold text-slate-700 mb-3;
+}
+
+.chart-wrap {
+  position: relative;
+  height: 260px;
+}
+
+.chart-wrap-tall {
+  height: 340px;
+}
+
+/* ---------- Insight cards ---------- */
+.insight-card {
+  @apply bg-white rounded-2xl border p-4 shadow-sm flex flex-col gap-2
+         transition-all duration-200 hover:shadow-md;
+}
+
+.insight-card.fact    { @apply border-l-4 border-l-blue-400; }
+.insight-card.interp  { @apply border-l-4 border-l-amber-400; }
+.insight-card.action  { @apply border-l-4 border-l-emerald-400; }
+
+.insight-badge {
+  @apply inline-block text-xs font-semibold uppercase tracking-wide rounded-full px-2 py-0.5 w-fit;
+}
+
+.insight-badge.fact   { @apply bg-blue-50   text-blue-600; }
+.insight-badge.interp { @apply bg-amber-50  text-amber-700; }
+.insight-badge.action { @apply bg-emerald-50 text-emerald-700; }
+
+.insight-text {
+  @apply text-sm text-slate-700 leading-relaxed;
+}
+
+/* ---------- Scrollbar (Webkit) ---------- */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ---------- Responsive canvas ensure ---------- */
+canvas { max-width: 100%; }
+
+/* ---------- Loading pulse for KPI ---------- */
+@keyframes pulse-bg {
+  0%, 100% { background-color: #e2e8f0; }
+  50%       { background-color: #cbd5e1; }
+}
+
+.kpi-loading {
+  animation: pulse-bg 1.4s ease-in-out infinite;
+  color: transparent !important;
+  border-radius: 4px;
+}

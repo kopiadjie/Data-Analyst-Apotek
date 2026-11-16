@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard Analitik Penjualan Farmasi 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+/* =========================================================
+   RESET
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 13px; scroll-behavior: smooth; }
+body {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  background: #F8FAFC;
+  color: #0F172A;
+  min-height: 100vh;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* =========================================================
+   TOKENS
+   ========================================================= */
+:root {
+  --bg:         #F8FAFC;
+  --card:       #FFFFFF;
+  --primary:    #0284C7;
+  --primary-lt: #E0F2FE;
+  --secondary:  #0D9488;
+  --second-lt:  #CCFBF1;
+  --text:       #0F172A;
+  --muted:      #64748B;
+  --border:     #E2E8F0;
+  --radius:     12px;
+  --shadow:     0 1px 3px rgba(15,23,42,.06), 0 4px 20px rgba(15,23,42,.04);
+  --shadow-md:  0 2px 8px rgba(15,23,42,.09), 0 8px 32px rgba(15,23,42,.06);
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+.hdr {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 200;
+  height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px;
+}
+.hdr__brand {
+  display: flex; align-items: baseline; gap: 10px;
+}
+.hdr__title {
+  font-size: 15px; font-weight: 700; color: var(--primary); letter-spacing: -.3px;
+}
+.hdr__sub {
+  font-size: 11px; color: var(--muted); font-weight: 400;
+}
+.hdr__badge {
+  font-size: 11px; padding: 3px 12px;
+  border-radius: 20px; border: 1px solid var(--border);
+  background: var(--bg); color: var(--muted);
+  white-space: nowrap;
+}
+
+/* =========================================================
+   PAGE WRAPPER
+   ========================================================= */
+.page {
+  max-width: 1340px;
+  margin: 0 auto;
+  padding: 18px 20px 40px;
+}
+
+/* =========================================================
+   CONTROLS BAR
+   ========================================================= */
+.ctrl-bar {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;
+  margin-bottom: 18px;
+  padding: 12px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.ctrl-group { display: flex; flex-direction: column; gap: 5px; }
+.ctrl-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--muted);
+}
+
+/* Branch buttons */
+.branch-wrap { display: flex; gap: 6px; flex-wrap: wrap; }
+.btn-branch {
+  font-family: inherit; font-size: 11px; font-weight: 500;
+  padding: 5px 13px; border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: var(--card); color: var(--muted);
+  cursor: pointer; transition: all .15s; white-space: nowrap;
+}
+.btn-branch:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-lt); }
+.btn-branch.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+/* Selects / inputs */
+.ctrl-select, .ctrl-date {
+  font-family: inherit; font-size: 11px; font-weight: 500;
+  padding: 6px 10px; border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--card); color: var(--text);
+  cursor: pointer; outline: none;
+  transition: border-color .15s;
+  min-width: 150px;
+}
+.ctrl-select:focus, .ctrl-date:focus { border-color: var(--primary); }
+.custom-row {
+  display: flex; gap: 8px; align-items: center;
+}
+.custom-row span { font-size: 11px; color: var(--muted); }
+
+/* =========================================================
+   SECTION LABEL
+   ========================================================= */
+.sec-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted);
+  margin: 22px 0 10px;
+  display: flex; align-items: center; gap: 10px;
+}
+.sec-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+
+/* =========================================================
+   KPI GRID
+   ========================================================= */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+@media (min-width: 860px) {
+  .kpi-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.kpi-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px 12px;
+  box-shadow: var(--shadow);
+  display: flex; flex-direction: column; gap: 5px;
+  transition: box-shadow .15s, transform .15s;
+}
+.kpi-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+
+.kpi-card__label {
+  font-size: 10px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--muted);
+}
+.kpi-card__value {
+  font-size: 22px; font-weight: 700; color: var(--text);
+  letter-spacing: -.5px; line-height: 1.1;
+}
+.kpi-card__value.c-primary   { color: var(--primary); }
+.kpi-card__value.c-secondary { color: var(--secondary); }
+.kpi-card__sub {
+  font-size: 11px; color: var(--muted);
+}
+.kpi-card__bar {
+  height: 3px; border-radius: 2px;
+  background: var(--border); margin-top: 2px; overflow: hidden;
+}
+.kpi-card__bar-fill {
+  height: 100%; border-radius: 2px; background: var(--primary);
+  transition: width .4s ease;
+}
+
+/* =========================================================
+   CHART GRID
+   ========================================================= */
+.chart-grid {
+  display: grid; gap: 14px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 760px)  { .chart-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .chart-grid.g3 { grid-template-columns: repeat(3, 1fr); } }
+
+/* =========================================================
+   CHART CARD
+   ========================================================= */
+.c-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  transition: box-shadow .15s;
+}
+.c-card:hover { box-shadow: var(--shadow-md); }
+.c-card.full { grid-column: 1 / -1; }
+
+.c-card__head {
+  padding: 14px 16px 0;
+}
+.c-card__title {
+  font-size: 13px; font-weight: 700; color: var(--text);
+  margin-bottom: 2px;
+}
+.c-card__desc {
+  font-size: 11px; color: var(--muted); line-height: 1.6;
+}
+.c-card__body {
+  padding: 10px 16px;
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 0;
+}
+.c-card__foot {
+  border-top: 1px solid var(--border);
+  padding: 8px 16px;
+  font-size: 10px; color: var(--muted);
+  line-height: 1.5;
+}
+
+/* =========================================================
+   SCATTER FILTER PILL
+   ========================================================= */
+.scatter-ctrl {
+  display: inline-flex; gap: 6px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 20px; padding: 3px;
+  margin-left: auto;
+}
+.scatter-pill {
+  font-family: inherit; font-size: 11px; font-weight: 500;
+  padding: 5px 14px; border-radius: 16px; border: none;
+  background: transparent; color: var(--muted);
+  cursor: pointer; transition: all .12s;
+}
+.scatter-pill.active { background: var(--primary); color: #fff; }
+
+/* =========================================================
+   LEGEND
+   ========================================================= */
+.legend {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  padding: 6px 16px 0;
+  font-size: 11px; color: var(--muted);
+}
+.leg-item { display: flex; align-items: center; gap: 5px; }
+.leg-dot {
+  width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0;
+}
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+.tbl-wrap { overflow-x: auto; }
+table {
+  width: 100%; border-collapse: collapse;
+  font-size: 12px;
+}
+thead th {
+  font-size: 10px; font-weight: 700; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--muted);
+  padding: 10px 14px; text-align: left;
+  border-bottom: 1.5px solid var(--border);
+  white-space: nowrap;
+}
+tbody td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--bg);
+  vertical-align: middle;
+  color: var(--text);
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--bg); }
+
+.rank { font-weight: 700; color: var(--primary); }
+.rank-1 { color: #B45309; }
+.rank-2 { color: #64748B; }
+.rank-3 { color: #9A3412; }
+
+.bar-bg {
+  height: 6px; border-radius: 3px;
+  background: var(--bg); overflow: hidden;
+  min-width: 60px;
+}
+.bar-fill {
+  height: 100%; border-radius: 3px;
+  background: var(--primary); transition: width .3s;
+}
+
+/* =========================================================
+   TOOLTIP (canvas overlay)
+   ========================================================= */
+#tooltip {
+  position: fixed; z-index: 1000; pointer-events: none;
+  background: rgba(15,23,42,.92); color: #fff;
+  padding: 10px 14px; border-radius: 8px;
+  font-size: 12px; line-height: 1.6;
+  max-width: 220px; display: none;
+  font-family: inherit;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+.foot {
+  text-align: center; font-size: 11px; color: var(--muted);
+  border-top: 1px solid var(--border);
+  padding: 18px; margin-top: 20px;
+}
+
+/* =========================================================
+   RESPONSIVE HEADER
+   ========================================================= */
+@media (max-width: 600px) {
+  .hdr__sub { display: none; }
+  .kpi-card__value { font-size: 18px; }
+  .page { padding: 10px 10px 36px; }
+  .hdr { padding: 0 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOOLTIP -->
+<div id="tooltip"></div>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr__brand">
+    <span class="hdr__title">Apotek Analytics</span>
+    <span class="hdr__sub">Dashboard Penjualan Farmasi 2025</span>
+  </div>
+  <span class="hdr__badge" id="statusBadge">Memuat data&hellip;</span>
+</header>
+
+<!-- PAGE -->
+<main class="page">
+
+  <!-- CONTROLS -->
+  <div class="ctrl-bar">
+    <div class="ctrl-group">
+      <span class="ctrl-label">Cabang</span>
+      <div class="branch-wrap" id="branchWrap"></div>
+    </div>
+    <div class="ctrl-group">
+      <span class="ctrl-label">Periode</span>
+      <select class="ctrl-select" id="rangeSelect">
+        <option value="7">7 Hari Terakhir</option>
+        <option value="30">30 Hari Terakhir</option>
+        <option value="90">3 Bulan Terakhir</option>
+        <option value="180">6 Bulan Terakhir</option>
+        <option value="365" selected>1 Tahun (2025)</option>
+        <option value="custom">Custom Range</option>
+      </select>
+    </div>
+    <div class="ctrl-group" id="customGroup" style="display:none;">
+      <span class="ctrl-label">Custom Tanggal</span>
+      <div class="custom-row">
+        <input type="date" class="ctrl-date" id="dateFrom" />
+        <span>&mdash;</span>
+        <input type="date" class="ctrl-date" id="dateTo" />
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI -->
+  <div class="sec-label">Ringkasan KPI</div>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-card__label">Total Revenue</div>
+      <div class="kpi-card__value c-primary" id="kRevenue">-</div>
+      <div class="kpi-card__sub" id="kRevSub"></div>
+      <div class="kpi-card__bar"><div class="kpi-card__bar-fill" id="kRevBar" style="width:100%;"></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card__label">Total Transaksi</div>
+      <div class="kpi-card__value" id="kTx">-</div>
+      <div class="kpi-card__sub" id="kTxSub"></div>
+      <div class="kpi-card__bar"><div class="kpi-card__bar-fill" id="kTxBar" style="width:100%;background:var(--muted);"></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card__label">Total Qty Terjual</div>
+      <div class="kpi-card__value" id="kQty">-</div>
+      <div class="kpi-card__sub" id="kQtySub"></div>
+      <div class="kpi-card__bar"><div class="kpi-card__bar-fill" id="kQtyBar" style="width:100%;background:#7C3AED;"></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card__label">Total Profit</div>
+      <div class="kpi-card__value c-secondary" id="kProfit">-</div>
+      <div class="kpi-card__sub" id="kProfitSub"></div>
+      <div class="kpi-card__bar"><div class="kpi-card__bar-fill" id="kProfitBar" style="width:100%;background:var(--secondary);"></div></div>
+    </div>
+  </div>
+
+  <!-- SALES TREND -->
+  <div class="sec-label">Tren Penjualan</div>
+  <div class="chart-grid">
+
+    <div class="c-card full">
+      <div class="c-card__head">
+        <div class="c-card__title">Tren Revenue Harian</div>
+        <div class="c-card__desc">Total revenue per hari dalam rentang waktu yang dipilih. Data mingguan digunakan ketika periode lebih dari 60 hari.</div>
+      </div>
+      <div class="c-card__body" style="height:200px;">
+        <canvas id="cTrend" style="width:100%;height:100%;"></canvas>
+      </div>
+      <div class="c-card__foot" id="capTrend">&nbsp;</div>
+    </div>
+
+    <div class="c-card">
+      <div class="c-card__head">
+        <div class="c-card__title">Revenue &amp; Profit Bulanan</div>
+        <div class="c-card__desc">Perbandingan revenue dan profit tiap bulan dalam periode terpilih.</div>
+      </div>
+      <div class="legend">
+        <div class="leg-item"><div class="leg-dot" style="background:#0284C7;"></div>Revenue</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#0D9488;"></div>Profit</div>
+      </div>
+      <div class="c-card__body" style="height:210px;">
+        <canvas id="cMonthly" style="width:100%;height:100%;"></canvas>
+      </div>
+      <div class="c-card__foot" id="capMonthly">&nbsp;</div>
+    </div>
+
+    <div class="c-card">
+      <div class="c-card__head">
+        <div class="c-card__title">Indeks Musiman Bulanan</div>
+        <div class="c-card__desc">Rata-rata indeks musiman per bulan. Nilai di atas 1.0 menunjukkan permintaan lebih tinggi dari rata-rata tahunan.</div>
+      </div>
+      <div class="c-card__body" style="height:210px;">
+        <canvas id="cSeasonal" style="width:100%;height:100%;"></canvas>
+      </div>
+      <div class="c-card__foot" id="capSeasonal">&nbsp;</div>
+    </div>
+
+  </div>
+
+  <!-- PRODUK -->
+  <div class="sec-label">Analisis Produk</div>
+  <div class="chart-grid">
+
+    <div class="c-card">
+      <div class="c-card__head">
+        <div class="c-card__title">Produk Terlaris (by Unit)</div>
+        <div class="c-card__desc">10 produk dengan volume unit terjual tertinggi dalam periode terpilih.</div>
+      </div>
+      <div class="c-card__body" style="height:240px;">
+        <canvas id="cTopQty" style="width:100%;height:100%;"></canvas>
+      </div>
+      <div class="c-card__foot" id="capTopQty">&nbsp;</div>
+    </div>
+
+    <div class="c-card">
+      <div class="c-card__head">
+        <div class="c-card__title">Produk Paling Menguntungkan</div>
+        <div class="c-card__desc">10 produk dengan total profit tertinggi. Profit = SUM(margin &times; quantity).</div>
+      </div>
+      <div class="c-card__body" style="height:240px;">
+        <canvas id="cTopProfit" style="width:100%;height:100%;"></canvas>
+      </div>
+      <div class="c-card__foot" id="capTopProfit">&nbsp;</div>
+    </div>
+
+  </div>
+
+  <!-- MARGIN & KATEGORI -->
+  <div class="sec-label">Profitabilitas &amp; Kategori</div>
+  <div class="chart-grid">
+
+    <div class="c-card">
+      <div class="c-card__head">
+        <div class="c-card__title">Margin Keuntungan per Produk (%)</div>
+        <div class="c-card__desc">Persentase margin keuntungan tiap produk terhadap revenue. Produk dengan margin &ge;50% ditandai warna hijau.</div>
+      </div>
+      <div class="c-card__body" style="height:240px;">
+        <canvas id="cMargin" style="width:100%;height:100%;"></canvas>
+      </div>
+      <div class="c-card__foot" id="capMargin">&nbsp;</div>
+    </div>
+
+    <div class="c-card">
+      <div class="c-card__head">
+        <div class="c-card__title">Distribusi Kategori Terapi</div>
+        <div class="c-card__desc">Proporsi revenue dari masing-masing kategori terapi dalam periode terpilih.</div>
+      </div>
+      <div class="c-card__body" style="height:210px;">
+        <canvas id="cCategory" style="width:100%;height:100%;"></canvas>
+      </div>
+      <div class="legend" id="legendCat"></div>
+      <div class="c-card__foot" id="capCategory">&nbsp;</div>
+    </div>
+
+  </div>
+
+  <!-- SCATTER PLOT -->
+  <div class="sec-label">Scatter Plot — Top 5 Obat Paling Banyak Dipesan</div>
+  <div class="c-card full">
+    <div class="c-card__head" style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;">
+      <div style="flex:1;">
+        <div class="c-card__title">Top 5 Most Ordered Medicines</div>
+        <div class="c-card__desc">
+          5 obat dengan jumlah unit terjual terbanyak. Sumbu X: nama obat &mdash; Sumbu Y: total unit dipesan.
+          Metrik: <strong>total unit (quantity)</strong>. Arahkan kursor ke titik untuk detail.
+        </div>
+      </div>
+      <div class="scatter-ctrl" id="scatterCtrl">
+        <button class="scatter-pill active" data-period="7">7 Hari</button>
+        <button class="scatter-pill" data-period="30">30 Hari</button>
+      </div>
+    </div>
+    <div class="c-card__body" style="height:260px; align-items:stretch;">
+      <canvas id="cScatter" style="width:100%;height:100%;"></canvas>
+    </div>
+    <div class="c-card__foot" id="capScatter">&nbsp;</div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="sec-label">Ringkasan Performa Produk</div>
+  <div class="c-card full">
+    <div class="c-card__head">
+      <div class="c-card__title">Tabel Detail Semua Produk</div>
+      <div class="c-card__desc">Revenue, profit, quantity, margin rata-rata per unit, dan persentase margin per produk dalam periode terpilih. Diurutkan berdasarkan profit tertinggi.</div>
+    </div>
+    <div class="c-card__body" style="display:block;padding:0;">
+      <div class="tbl-wrap">
+        <table id="prodTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Produk</th>
+              <th>Kategori</th>
+              <th>Revenue</th>
+              <th>Profit</th>
+              <th>Qty</th>
+              <th>Avg Margin/Unit</th>
+              <th>Margin %</th>
+              <th>Distribusi Profit</th>
+            </tr>
+          </thead>
+          <tbody id="prodTbody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="c-card__foot" id="capTable">&nbsp;</div>
+  </div>
+
+</main>
+
+<footer class="foot">
+  Dashboard Analitik Penjualan Farmasi 2025 &mdash; Vanilla JS + Canvas API &mdash; Data: penjualan_farmasi_2025.json
+</footer>
+
+<script>
+'use strict';
+
+/* =========================================================
+   PALETTE & HELPERS
+   ========================================================= */
+const P = {
+  primary:   '#0284C7',
+  secondary: '#0D9488',
+  muted:     '#94A3B8',
+  border:    '#E2E8F0',
+  bg:        '#F8FAFC',
+  text:      '#0F172A',
+  palette: [
+    '#0284C7','#0D9488','#7C3AED','#DB2777','#D97706',
+    '#059669','#2563EB','#DC2626','#9333EA','#0891B2',
+    '#B45309','#065F46','#4F46E5','#BE185D','#B45309',
+  ],
+};
+
+const MONTHS = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+
+const fmtN = (n, d = 0) =>
+  new Intl.NumberFormat('id-ID', { minimumFractionDigits: d, maximumFractionDigits: d }).format(n);
+
+const fmtRp = n => {
+  const a = Math.abs(n);
+  if (a >= 1e9) return 'Rp ' + fmtN(n / 1e9, 2) + ' M';
+  if (a >= 1e6) return 'Rp ' + fmtN(n / 1e6, 1) + ' Jt';
+  return 'Rp ' + fmtN(n);
+};
+
+const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+function groupBy(arr, fn) {
+  return arr.reduce((a, r) => { const k = fn(r); (a[k] = a[k] || []).push(r); return a; }, {});
+}
+function sumF(arr, f) {
+  return arr.reduce((s, r) => s + (+r[f] || 0), 0);
+}
+function sumProfit(arr) {
+  return arr.reduce((s, r) => s + (+r.margin || 0) * (+r.quantity || 0), 0);
+}
+
+/* =========================================================
+   DUMMY DATA GENERATOR
+   ========================================================= */
+function makeDummy() {
+  const branches = ['Apotek Medan A', 'Apotek Medan B', 'Apotek Medan C'];
+  const prods = [
+    { n: 'Paracetamol 500 mg',   k: 'Analgesik/Antipiretik',       hp: 8000,  hb: 5500,  m: 2500  },
+    { n: 'Amoxicillin 500 mg',   k: 'Antibiotik',                  hp: 18000, hb: 12500, m: 5500  },
+    { n: 'Ibuprofen 400 mg',     k: 'Analgesik/Antiinflamasi',      hp: 15000, hb: 10500, m: 4500  },
+    { n: 'Omeprazole 20 mg',     k: 'Gastrointestinal',             hp: 22000, hb: 15000, m: 7000  },
+    { n: 'Metformin 500 mg',     k: 'Diabetes',                     hp: 13000, hb: 9000,  m: 4000  },
+    { n: 'Cetirizine 10 mg',     k: 'Antihistamin',                 hp: 12000, hb: 8000,  m: 4000  },
+    { n: 'Cefadroxil 500 mg',    k: 'Antibiotik',                   hp: 32000, hb: 22500, m: 9500  },
+    { n: 'Salbutamol inhaler',   k: 'Respirasi',                    hp: 75000, hb: 52000, m: 23000 },
+    { n: 'Amlodipine 5 mg',      k: 'Kardiovaskular',               hp: 14000, hb: 9500,  m: 4500  },
+    { n: 'Vitamin C 1000 mg',    k: 'Vitamin/Suplemen',             hp: 25000, hb: 16000, m: 9000  },
+    { n: 'Antasida DOEN',        k: 'Gastrointestinal',             hp: 9000,  hb: 6000,  m: 3000  },
+    { n: 'Loratadine 10 mg',     k: 'Antihistamin',                 hp: 14000, hb: 9500,  m: 4500  },
+    { n: 'Ranitidine 150 mg',    k: 'Gastrointestinal',             hp: 10000, hb: 7000,  m: 3000  },
+    { n: 'Multivitamin',         k: 'Vitamin/Suplemen',             hp: 30000, hb: 19000, m: 11000 },
+    { n: 'Atorvastatin 20 mg',   k: 'Kardiovaskular',               hp: 28000, hb: 18000, m: 10000 },
+  ];
+  const pharmacists = ['Andi','Budi','Citra','Dewi','Eka','Fajar'];
+  const seasonIdx   = [1.15,1.10,1.05,1.00,0.95,0.90,0.90,0.95,1.00,1.05,1.10,1.20];
+  const rows = [];
+  let txId = 1000;
+  for (let mo = 0; mo < 12; mo++) {
+    const daysInMo = new Date(2025, mo + 1, 0).getDate();
+    for (let d = 1; d <= daysInMo; d++) {
+      const nTx = 15 + Math.floor(Math.random() * 8);
+      for (let t = 0; t < nTx; t++) {
+        const prod  = prods[Math.floor(Math.random() * prods.length)];
+        const br    = branches[Math.floor(Math.random() * branches.length)];
+        const ph    = pharmacists[Math.floor(Math.random() * pharmacists.length)];
+        const disc  = [0,0,0,5,5,10,15][Math.floor(Math.random() * 7)];
+        const qty   = 1 + Math.floor(Math.random() * 4);
+        const hj    = Math.round(prod.hp * (1 - disc / 100));
+        const margin = prod.m - Math.round(prod.hp - hj);
+        const dateStr = `2025-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        rows.push({
+          tanggal: dateStr, id_transaksi: 'TRX-' + txId++,
+          lokasi_cabang: br, produk: prod.n, kategori_terapi: prod.k,
+          harga_normal: prod.hp, diskon_persen: disc, harga_jual_setelah_diskon: hj,
+          quantity: qty, total_penjualan: hj * qty,
+          harga_beli_per_unit: prod.hb, margin: margin,
+          apoteker: ph, indeks_musiman: seasonIdx[mo],
+        });
+      }
+    }
+  }
+  return rows;
+}
+
+/* =========================================================
+   FILTER ENGINE
+   ========================================================= */
+let ALL_ROWS = [];
+let ACT_ROWS = [];
+let SCATTER_PERIOD = 7;
+
+function getDateRange() {
+  const val = document.getElementById('rangeSelect').value;
+  if (val === 'custom') {
+    return {
+      from: document.getElementById('dateFrom').value,
+      to:   document.getElementById('dateTo').value,
+    };
+  }
+  const days = parseInt(val, 10);
+  const maxDate = ALL_ROWS.reduce((m, r) => r.tanggal > m ? r.tanggal : m, '');
+  const to   = new Date(maxDate);
+  const from = new Date(maxDate);
+  from.setDate(from.getDate() - days + 1);
+  return { from: from.toISOString().slice(0, 10), to: to.toISOString().slice(0, 10) };
+}
+
+function getActiveBranch() {
+  const btn = document.querySelector('.btn-branch.active');
+  return btn ? btn.dataset.branch : 'all';
+}
+
+function applyFilters() {
+  const { from, to } = getDateRange();
+  if (!from || !to) return;
+  const branch = getActiveBranch();
+  ACT_ROWS = ALL_ROWS.filter(r =>
+    r.tanggal >= from && r.tanggal <= to &&
+    (branch === 'all' || r.lokasi_cabang === branch)
+  );
+  renderAll();
+}
+
+/* =========================================================
+   CANVAS UTILS
+   ========================================================= */
+function initCanvas(id) {
+  const canvas = document.getElementById(id);
+  const wrap   = canvas.parentElement;
+  const dpr    = window.devicePixelRatio || 1;
+  const W      = wrap.clientWidth  || 600;
+  const H      = wrap.clientHeight || 300;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+  return { ctx, W, H, canvas };
+}
+
+function noData(id, msg) {
+  const { ctx, W, H } = initCanvas(id);
+  ctx.font = '12px JetBrains Mono, monospace';
+  ctx.fillStyle = P.muted;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(msg || 'Tidak ada data', W / 2, H / 2);
+}
+
+/* ---- Tooltip ---- */
+const tip = document.getElementById('tooltip');
+function showTip(e, html) {
+  tip.style.display = 'block';
+  tip.innerHTML = html;
+  const x = e.clientX + 14;
+  const y = e.clientY - 10;
+  const tw = tip.offsetWidth, th = tip.offsetHeight;
+  tip.style.left = (x + tw > window.innerWidth  ? e.clientX - tw - 10 : x) + 'px';
+  tip.style.top  = (y + th > window.innerHeight ? e.clientY - th - 10 : y) + 'px';
+}
+function hideTip() { tip.style.display = 'none'; }
+
+/* =========================================================
+   DRAW: LINE CHART
+   ========================================================= */
+function drawLine(id, labels, datasets, opts = {}) {
+  if (!labels.length) { noData(id); return; }
+  const { ctx, W, H } = initCanvas(id);
+  const pad = { t: 24, r: 20, b: 42, l: 72 };
+  const pw = W - pad.l - pad.r, ph = H - pad.t - pad.b;
+  if (pw < 10 || ph < 10) return;
+
+  const allVals = datasets.flatMap(d => d.data).filter(Number.isFinite);
+  const minV = opts.minY !== undefined ? opts.minY : (Math.min(...allVals) * 0.95);
+  const maxV = Math.max(...allVals, 0) * 1.08 || 1;
+  const range = maxV - minV || 1;
+
+  const xs = i => pad.l + (i / Math.max(labels.length - 1, 1)) * pw;
+  const ys = v => pad.t + ph - ((v - minV) / range) * ph;
+
+  // Grid lines
+  const ticks = 5;
+  for (let i = 0; i <= ticks; i++) {
+    const v = minV + (range / ticks) * i;
+    const y = ys(v);
+    ctx.beginPath(); ctx.strokeStyle = P.border; ctx.lineWidth = 1;
+    ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
+    ctx.fillStyle = P.muted; ctx.font = '10px JetBrains Mono, monospace';
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    ctx.fillText(opts.fmtY ? opts.fmtY(v) : fmtN(v), pad.l - 5, y);
+  }
+
+  // X axis labels
+  const maxLbls = Math.max(2, Math.floor(pw / 56));
+  const step = Math.max(1, Math.ceil(labels.length / maxLbls));
+  ctx.fillStyle = P.muted; ctx.font = '10px JetBrains Mono, monospace';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  labels.forEach((l, i) => {
+    if (i % step !== 0 && i !== labels.length - 1) return;
+    ctx.fillText(l, xs(i), H - pad.b + 6);
+  });
+
+  // Datasets
+  datasets.forEach(ds => {
+    const data = ds.data;
+    if (!data.length) return;
+
+    // Fill
+    if (ds.fill) {
+      ctx.beginPath();
+      ctx.moveTo(xs(0), ys(data[0]));
+      for (let i = 1; i < data.length; i++) {
+        const mx = (xs(i - 1) + xs(i)) / 2;
+        ctx.bezierCurveTo(mx, ys(data[i-1]), mx, ys(data[i]), xs(i), ys(data[i]));
+      }
+      ctx.lineTo(xs(data.length - 1), pad.t + ph);
+      ctx.lineTo(xs(0), pad.t + ph);
+      ctx.closePath();
+      ctx.fillStyle = ds.fillColor || 'rgba(2,132,199,0.07)';
+      ctx.fill();
+    }
+
+    // Line
+    ctx.beginPath();
+    ctx.moveTo(xs(0), ys(data[0]));
+    for (let i = 1; i < data.length; i++) {
+      const mx = (xs(i - 1) + xs(i)) / 2;
+      ctx.bezierCurveTo(mx, ys(data[i-1]), mx, ys(data[i]), xs(i), ys(data[i]));
+    }
+    ctx.strokeStyle = ds.color || P.primary;
+    ctx.lineWidth = ds.lw || 2.5;
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+
+    // Dots (only if few points)
+    if (data.length <= 24) {
+      data.forEach((v, i) => {
+        ctx.beginPath();
+        ctx.arc(xs(i), ys(v), 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = ds.color || P.primary;
+        ctx.fill();
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke();
+      });
+    }
+  });
+}
+
+/* =========================================================
+   DRAW: GROUPED BAR (vertical)
+   ========================================================= */
+function drawGroupedBar(id, labels, datasets, opts = {}) {
+  if (!labels.length) { noData(id); return; }
+  const { ctx, W, H } = initCanvas(id);
+  const pad = { t: 20, r: 16, b: 46, l: 72 };
+  const pw = W - pad.l - pad.r, ph = H - pad.t - pad.b;
+  if (pw < 10 || ph < 10) return;
+
+  const allVals = datasets.flatMap(d => d.data).filter(Number.isFinite);
+  const maxV = Math.max(...allVals, 0) * 1.1 || 1;
+
+  const n = datasets.length;
+  const groupW = pw / labels.length;
+  const gap = groupW * 0.22;
+  const barW = (groupW - gap) / n;
+
+  // Grid
+  const ticks = 5;
+  for (let i = 0; i <= ticks; i++) {
+    const v = (maxV / ticks) * i;
+    const y = pad.t + ph - (v / maxV) * ph;
+    ctx.beginPath(); ctx.strokeStyle = P.border; ctx.lineWidth = 1;
+    ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
+    ctx.fillStyle = P.muted; ctx.font = '10px JetBrains Mono, monospace';
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    ctx.fillText(opts.fmtY ? opts.fmtY(v) : fmtN(v), pad.l - 5, y);
+  }
+
+  // Bars
+  datasets.forEach((ds, di) => {
+    ctx.fillStyle = ds.color || P.palette[di];
+    ds.data.forEach((v, i) => {
+      const bH = Math.max(0, (v / maxV) * ph);
+      const x  = pad.l + i * groupW + gap / 2 + di * barW;
+      const y  = pad.t + ph - bH;
+      const r  = Math.min(4, barW / 3);
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + barW - r, y);
+      ctx.arcTo(x + barW, y, x + barW, y + r, r);
+      ctx.lineTo(x + barW, y + bH);
+      ctx.lineTo(x, y + bH);
+      ctx.arcTo(x, y, x + r, y, r);
+      ctx.closePath(); ctx.fill();
+    });
+  });
+
+  // X labels
+  ctx.fillStyle = P.muted; ctx.font = '10px JetBrains Mono, monospace';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  labels.forEach((l, i) => {
+    const x = pad.l + i * groupW + groupW / 2;
+    ctx.fillText(l.length > 5 ? l.slice(0, 4) + '.' : l, x, H - pad.b + 6);
+  });
+}
+
+/* =========================================================
+   DRAW: HORIZONTAL BAR
+   ========================================================= */
+function drawHBar(id, labels, values, colors, opts = {}) {
+  if (!labels.length) { noData(id); return; }
+  const { ctx, W, H } = initCanvas(id);
+
+  const PAD_LEFT  = 170;
+  const PAD_RIGHT = 90;
+  const PAD_TOP   = 12;
+  const PAD_BOT   = 12;
+  const avH = H - PAD_TOP - PAD_BOT;
+  const avW = W - PAD_LEFT - PAD_RIGHT;
+  if (avW < 10 || avH < 10) return;
+
+  const maxV = Math.max(...values, 0) || 1;
+  const rowH = avH / labels.length;
+  const bH   = clamp(rowH * 0.52, 10, 22);
+
+  labels.forEach((lbl, i) => {
+    const cy = PAD_TOP + i * rowH + rowH / 2;
+    const bW = (values[i] / maxV) * avW;
+    const col = colors ? colors[i % colors.length] : P.palette[i % P.palette.length];
+
+    // Label
+    ctx.fillStyle = P.text; ctx.font = '11px JetBrains Mono, monospace';
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    const short = lbl.length > 18 ? lbl.slice(0, 17) + '.' : lbl;
+    ctx.fillText(short, PAD_LEFT - 8, cy);
+
+    // Track
+    ctx.fillStyle = P.border;
+    const r = bH / 2;
+    ctx.beginPath(); ctx.rect(PAD_LEFT, cy - bH/2, avW, bH); ctx.fill();
+
+    // Bar
+    if (bW > 1) {
+      ctx.fillStyle = col;
+      ctx.beginPath();
+      ctx.moveTo(PAD_LEFT + r, cy - bH/2);
+      ctx.lineTo(PAD_LEFT + bW - r, cy - bH/2);
+      ctx.arcTo(PAD_LEFT + bW, cy - bH/2, PAD_LEFT + bW, cy - bH/2 + r, r);
+      ctx.lineTo(PAD_LEFT + bW, cy + bH/2 - r);
+      ctx.arcTo(PAD_LEFT + bW, cy + bH/2, PAD_LEFT + bW - r, cy + bH/2, r);
+      ctx.lineTo(PAD_LEFT + r, cy + bH/2);
+      ctx.arcTo(PAD_LEFT, cy + bH/2, PAD_LEFT, cy + bH/2 - r, r);
+      ctx.lineTo(PAD_LEFT, cy - bH/2 + r);
+      ctx.arcTo(PAD_LEFT, cy - bH/2, PAD_LEFT + r, cy - bH/2, r);
+      ctx.closePath(); ctx.fill();
+    }
+
+    // Value
+    ctx.fillStyle = P.text; ctx.font = '600 10px JetBrains Mono, monospace';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(opts.fmtV ? opts.fmtV(values[i]) : fmtN(values[i]), PAD_LEFT + avW + 6, cy);
+  });
+}
+
+/* =========================================================
+   DRAW: DONUT CHART
+   ========================================================= */
+function drawDonut(id, labels, values, colors) {
+  if (!labels.length) { noData(id); return; }
+  const { ctx, W, H } = initCanvas(id);
+
+  const size = Math.min(W, H) - 24;
+  const cx = W * 0.38, cy = H / 2;
+  const outerR = size / 2;
+  const innerR = outerR * 0.56;
+  const total  = values.reduce((a, b) => a + b, 0) || 1;
+
+  let start = -Math.PI / 2;
+  values.forEach((v, i) => {
+    const sweep = (v / total) * Math.PI * 2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, outerR, start, start + sweep);
+    ctx.closePath();
+    ctx.fillStyle = colors[i % colors.length];
+    ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.5; ctx.stroke();
+    start += sweep;
+  });
+
+  // Hole
+  ctx.beginPath(); ctx.arc(cx, cy, innerR, 0, Math.PI * 2);
+  ctx.fillStyle = '#fff'; ctx.fill();
+
+  // Center text
+  ctx.fillStyle = P.text; ctx.font = '700 14px JetBrains Mono, monospace';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(labels.length + ' kat.', cx, cy);
+
+  // Legend on the right
+  const legX = cx + outerR + 24;
+  const lineH = 20;
+  const startY = cy - ((labels.length * lineH) / 2);
+  labels.forEach((l, i) => {
+    const y = startY + i * lineH;
+    ctx.fillStyle = colors[i % colors.length];
+    ctx.fillRect(legX, y, 10, 10);
+    ctx.fillStyle = P.muted; ctx.font = '10px JetBrains Mono, monospace';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    const pct = ((values[i] / total) * 100).toFixed(1) + '%';
+    const short = l.length > 14 ? l.slice(0, 13) + '.' : l;
+    ctx.fillText(short + '  ' + pct, legX + 14, y);
+  });
+}
+
+/* =========================================================
+   DRAW: SCATTER PLOT (Top 5)
+   ========================================================= */
+let scatterHits = []; // for hover detection
+
+function drawScatter(id, data) {
+  // data: [{label, qty, revenue, profit, margin}]
+  if (!data.length) { noData(id, 'Tidak ada data scatter'); return; }
+  const { ctx, W, H, canvas } = initCanvas(id);
+
+  const pad = { t: 50, r: 40, b: 80, l: 72 };
+  const pw = W - pad.l - pad.r;
+  const ph = H - pad.t - pad.b;
+  if (pw < 10 || ph < 10) return;
+
+  const maxY = Math.max(...data.map(d => d.qty)) * 1.2 || 1;
+
+  const n = data.length;
+  const colW = pw / n;
+
+  scatterHits = [];
+
+  // Grid
+  const yticks = 5;
+  for (let i = 0; i <= yticks; i++) {
+    const v = (maxY / yticks) * i;
+    const y = pad.t + ph - (v / maxY) * ph;
+    ctx.beginPath(); ctx.strokeStyle = P.border; ctx.lineWidth = 1;
+    ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
+    ctx.fillStyle = P.muted; ctx.font = '10px JetBrains Mono, monospace';
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    ctx.fillText(fmtN(v), pad.l - 6, y);
+  }
+
+  // Y axis label
+  ctx.save();
+  ctx.translate(14, pad.t + ph / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillStyle = P.muted; ctx.font = '10px JetBrains Mono, monospace';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('Total Unit Dipesan', 0, 0);
+  ctx.restore();
+
+  // Dots
+  data.forEach((d, i) => {
+    const cx = pad.l + i * colW + colW / 2;
+    const cy = pad.t + ph - (d.qty / maxY) * ph;
+    const col = P.palette[i % P.palette.length];
+    const R = 14;
+
+    // Vertical stem
+    ctx.beginPath(); ctx.strokeStyle = P.border; ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 3]);
+    ctx.moveTo(cx, cy + R); ctx.lineTo(cx, pad.t + ph);
+    ctx.stroke(); ctx.setLineDash([]);
+
+    // Shadow
+    ctx.beginPath();
+    ctx.arc(cx, cy, R + 3, 0, Math.PI * 2);
+    ctx.fillStyle = col + '18'; ctx.fill();
+
+    // Circle
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, Math.PI * 2);
+    ctx.fillStyle = col; ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.5; ctx.stroke();
+
+    // Rank inside
+    ctx.fillStyle = '#fff'; ctx.font = '700 11px JetBrains Mono, monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(i + 1, cx, cy);
+
+    // Value label above
+    ctx.fillStyle = P.text; ctx.font = '700 11px JetBrains Mono, monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillText(fmtN(d.qty), cx, cy - R - 5);
+
+    // X label below axis
+    ctx.fillStyle = P.muted; ctx.font = '10px JetBrains Mono, monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    const short = d.label.length > 14 ? d.label.slice(0, 13) + '.' : d.label;
+    ctx.fillText(short, cx, pad.t + ph + 10);
+
+    // Store hit area
+    scatterHits.push({ cx, cy, R, ...d });
+  });
+
+  // Setup hover
+  canvas._scatterHover = true;
+  canvas.onmousemove = e => {
+    const rect = canvas.getBoundingClientRect();
+    const dpr  = window.devicePixelRatio || 1;
+    const mx   = (e.clientX - rect.left);
+    const my   = (e.clientY - rect.top);
+    let hit = null;
+    for (const h of scatterHits) {
+      const dx = mx - h.cx / dpr, dy = my - h.cy / dpr;
+      if (Math.sqrt(dx*dx + dy*dy) <= (h.R + 4) / dpr) { hit = h; break; }
+    }
+    if (hit) {
+      showTip(e,
+        `<strong>${hit.label}</strong><br>` +
+        `Unit Dipesan: <strong>${fmtN(hit.qty)}</strong><br>` +
+        `Revenue: ${fmtRp(hit.revenue)}<br>` +
+        `Profit: ${fmtRp(hit.profit)}<br>` +
+        `Margin: ${hit.marginPct.toFixed(1)}%`
+      );
+    } else { hideTip(); }
+  };
+  canvas.onmouseleave = hideTip;
+}
+
+/* =========================================================
+   RENDER FUNCTIONS
+   ========================================================= */
+function setText(id, v) { const el = document.getElementById(id); if (el) el.textContent = v; }
+
+/* -- KPIs -- */
+function renderKPI(rows) {
+  const rev    = sumF(rows, 'total_penjualan');
+  const qty    = sumF(rows, 'quantity');
+  const profit = sumProfit(rows);
+  const tx     = rows.length;
+  const margin = rev ? (profit / rev * 100) : 0;
+
+  setText('kRevenue',   fmtRp(rev));
+  setText('kRevSub',    'Rata-rata: ' + fmtRp(tx ? rev / tx : 0) + ' / transaksi');
+  setText('kTx',        fmtN(tx));
+  setText('kTxSub',     [...new Set(rows.map(r => r.tanggal))].length + ' hari aktif');
+  setText('kQty',       fmtN(qty));
+  setText('kQtySub',    'Rata-rata: ' + fmtN(tx ? qty / tx : 0, 1) + ' unit / transaksi');
+  setText('kProfit',    fmtRp(profit));
+  setText('kProfitSub', 'Margin rata-rata: ' + margin.toFixed(1) + '%');
+}
+
+/* -- Daily Trend -- */
+function renderTrend(rows) {
+  const byDay = groupBy(rows, r => r.tanggal);
+  const days  = Object.keys(byDay).sort();
+  if (!days.length) { noData('cTrend', 'Tidak ada data tren'); return; }
+
+  let lbs, vals;
+  const rawVals = days.map(d => sumF(byDay[d], 'total_penjualan'));
+
+  if (days.length > 60) {
+    lbs = []; vals = [];
+    for (let i = 0; i < days.length; i += 7) {
+      const chunk = rawVals.slice(i, i + 7);
+      const sum   = chunk.reduce((a, b) => a + b, 0);
+      lbs.push(days[i].slice(5));
+      vals.push(sum / chunk.length);
+    }
+  } else {
+    lbs  = days.map(d => d.slice(5));
+    vals = rawVals;
+  }
+
+  drawLine('cTrend', lbs, [{
+    data: vals, color: P.primary, fill: true,
+    fillColor: 'rgba(2,132,199,0.07)', lw: 2.5
+  }], { fmtY: v => fmtRp(v) });
+
+  const maxV = Math.max(...rawVals);
+  const maxD = days[rawVals.indexOf(maxV)];
+  setText('capTrend',
+    'Periode: ' + days[0] + ' — ' + days[days.length - 1] + '  |  ' +
+    'Puncak: ' + maxD + ' (' + fmtRp(maxV) + ')  |  ' +
+    'Rata-rata harian: ' + fmtRp(rawVals.reduce((a,b) => a+b,0) / rawVals.length)
+  );
+}
+
+/* -- Monthly Bar -- */
+function renderMonthly(rows) {
+  const byM  = groupBy(rows, r => r.tanggal.slice(0, 7));
+  const mons  = Object.keys(byM).sort();
+  if (!mons.length) { noData('cMonthly', 'Tidak ada data bulanan'); return; }
+
+  const revs  = mons.map(m => sumF(byM[m], 'total_penjualan'));
+  const profs = mons.map(m => sumProfit(byM[m]));
+  const lbs   = mons.map(m => MONTHS[+m.split('-')[1] - 1]);
+
+  drawGroupedBar('cMonthly', lbs,
+    [{ data: revs, color: P.primary }, { data: profs, color: P.secondary }],
+    { fmtY: v => fmtRp(v) }
+  );
+
+  const maxI  = revs.indexOf(Math.max(...revs));
+  const totPr = profs.reduce((a,b) => a+b, 0);
+  setText('capMonthly',
+    'Bulan terbaik: ' + lbs[maxI] + ' (' + fmtRp(revs[maxI]) + ')  |  ' +
+    'Akumulasi profit: ' + fmtRp(totPr)
+  );
+}
+
+/* -- Seasonal -- */
+function renderSeasonal(rows) {
+  const byM  = groupBy(rows, r => r.tanggal.slice(0, 7));
+  const mons  = Object.keys(byM).sort();
+  if (!mons.length) { noData('cSeasonal', 'Tidak ada data musiman'); return; }
+
+  const idx = mons.map(m => byM[m].reduce((s, r) => s + (+r.indeks_musiman || 0), 0) / byM[m].length);
+  const lbs = mons.map(m => MONTHS[+m.split('-')[1] - 1]);
+
+  drawLine('cSeasonal', lbs, [{
+    data: idx, color: P.secondary, fill: true,
+    fillColor: 'rgba(13,148,136,0.08)', lw: 2.5
+  }], { minY: 0.75, fmtY: v => v.toFixed(2) });
+
+  const maxI = idx.indexOf(Math.max(...idx));
+  const minI = idx.indexOf(Math.min(...idx));
+  setText('capSeasonal',
+    'Indeks tertinggi: ' + lbs[maxI] + ' (' + idx[maxI].toFixed(3) + ')  |  ' +
+    'Terendah: ' + lbs[minI] + ' (' + idx[minI].toFixed(3) + ')  |  ' +
+    'Indeks > 1 menunjukkan permintaan di atas rata-rata'
+  );
+}
+
+/* -- Top Qty -- */
+function renderTopQty(rows) {
+  const byP = groupBy(rows, r => r.produk);
+  const data = Object.keys(byP)
+    .map(p => ({ p, v: sumF(byP[p], 'quantity') }))
+    .sort((a, b) => b.v - a.v).slice(0, 10);
+  if (!data.length) { noData('cTopQty', 'Tidak ada data produk'); return; }
+
+  drawHBar('cTopQty', data.map(d => d.p), data.map(d => d.v),
+    data.map((_, i) => P.palette[i % P.palette.length]),
+    { fmtV: v => fmtN(v) + ' unit' }
+  );
+  setText('capTopQty',
+    '#1: ' + data[0].p + ' — ' + fmtN(data[0].v) + ' unit  |  ' +
+    'Total 10 produk teratas: ' + fmtN(data.reduce((s,d) => s+d.v, 0)) + ' unit'
+  );
+}
+
+/* -- Top Profit -- */
+function renderTopProfit(rows) {
+  const byP = groupBy(rows, r => r.produk);
+  const data = Object.keys(byP)
+    .map(p => ({ p, v: sumProfit(byP[p]) }))
+    .sort((a, b) => b.v - a.v).slice(0, 10);
+  if (!data.length) { noData('cTopProfit', 'Tidak ada data produk'); return; }
+
+  drawHBar('cTopProfit', data.map(d => d.p), data.map(d => d.v),
+    data.map((_, i) => P.palette[(i + 2) % P.palette.length]),
+    { fmtV: v => fmtRp(v) }
+  );
+  setText('capTopProfit',
+    'Paling menguntungkan: ' + data[0].p + ' (' + fmtRp(data[0].v) + ')  |  ' +
+    'Total profit top-10: ' + fmtRp(data.reduce((s,d) => s+d.v, 0))
+  );
+}
+
+/* -- Margin % -- */
+function renderMargin(rows) {
+  const byP = groupBy(rows, r => r.produk);
+  const data = Object.keys(byP).map(p => {
+    const rev = sumF(byP[p], 'total_penjualan');
+    const prf = sumProfit(byP[p]);
+    return { p, pct: rev ? prf / rev * 100 : 0 };
+  }).sort((a, b) => b.pct - a.pct);
+  if (!data.length) { noData('cMargin', 'Tidak ada data margin'); return; }
+
+  drawHBar('cMargin', data.map(d => d.p), data.map(d => d.pct),
+    data.map(d => d.pct >= 50 ? P.secondary : P.primary),
+    { fmtV: v => v.toFixed(1) + '%' }
+  );
+  const avg = data.reduce((s,d) => s+d.pct, 0) / data.length;
+  setText('capMargin',
+    'Margin tertinggi: ' + data[0].p + ' (' + data[0].pct.toFixed(1) + '%)  |  ' +
+    'Rata-rata margin semua produk: ' + avg.toFixed(1) + '%  |  ' +
+    'Hijau = margin ≥ 50%'
+  );
+}
+
+/* -- Category Donut -- */
+function renderCategory(rows) {
+  const byC   = groupBy(rows, r => r.kategori_terapi);
+  const cats  = Object.keys(byC).sort();
+  const vals  = cats.map(c => sumF(byC[c], 'total_penjualan'));
+  const total = vals.reduce((a,b) => a+b, 0) || 1;
+  if (!cats.length) { noData('cCategory', 'Tidak ada data kategori'); return; }
+
+  drawDonut('cCategory', cats, vals, P.palette);
+
+  // Legend DOM
+  const legEl = document.getElementById('legendCat');
+  legEl.innerHTML = cats.map((c, i) => {
+    const pct = ((vals[i] / total) * 100).toFixed(1);
+    return `<div class="leg-item">
+      <div class="leg-dot" style="background:${P.palette[i % P.palette.length]};"></div>
+      <span>${c} (${pct}%)</span>
+    </div>`;
+  }).join('');
+
+  const topI = vals.indexOf(Math.max(...vals));
+  setText('capCategory',
+    'Kategori dominan: ' + cats[topI] + ' (' + (vals[topI] / total * 100).toFixed(1) + '% revenue)  |  ' +
+    cats.length + ' kategori terapi aktif'
+  );
+}
+
+/* -- Scatter Top 5 -- */
+function renderScatter(rows, period) {
+  // Date range: last `period` days from max date
+  const maxDate = rows.reduce((m, r) => r.tanggal > m ? r.tanggal : m, '');
+  if (!maxDate) { noData('cScatter', 'Tidak ada data'); return; }
+  const to   = new Date(maxDate);
+  const from = new Date(maxDate);
+  from.setDate(from.getDate() - period + 1);
+  const fromStr = from.toISOString().slice(0, 10);
+
+  const filtered = rows.filter(r => r.tanggal >= fromStr && r.tanggal <= maxDate);
+  if (!filtered.length) { noData('cScatter', 'Tidak ada data pada periode ini'); return; }
+
+  const byP = groupBy(filtered, r => r.produk);
+  const data = Object.keys(byP).map(p => {
+    const qty     = sumF(byP[p], 'quantity');
+    const revenue = sumF(byP[p], 'total_penjualan');
+    const profit  = sumProfit(byP[p]);
+    const marginPct = revenue ? profit / revenue * 100 : 0;
+    return { label: p, qty, revenue, profit, marginPct };
+  }).sort((a, b) => b.qty - a.qty).slice(0, 5);
+
+  drawScatter('cScatter', data);
+
+  setText('capScatter',
+    'Periode: ' + fromStr + ' — ' + maxDate + '  |  ' +
+    'Metrik: total unit terjual (quantity)  |  ' +
+    '#1: ' + (data[0] ? data[0].label + ' (' + fmtN(data[0].qty) + ' unit)' : '-')
+  );
+}
+
+/* -- Product Table -- */
+function renderTable(rows) {
+  const byP    = groupBy(rows, r => r.produk);
+  const totRev = sumF(rows, 'total_penjualan') || 1;
+  const maxP   = Math.max(...Object.keys(byP).map(p => sumProfit(byP[p])), 1);
+
+  const data = Object.keys(byP).map(p => {
+    const rev    = sumF(byP[p], 'total_penjualan');
+    const profit = sumProfit(byP[p]);
+    const qty    = sumF(byP[p], 'quantity');
+    const avgM   = qty ? profit / qty : 0;
+    const mPct   = rev ? profit / rev * 100 : 0;
+    const cat    = byP[p][0].kategori_terapi;
+    return { p, cat, rev, profit, qty, avgM, mPct };
+  }).sort((a, b) => b.profit - a.profit);
+
+  const tbody = document.getElementById('prodTbody');
+  if (!tbody) return;
+  tbody.innerHTML = data.map((d, i) => {
+    const rnkCls = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : 'rank';
+    const barW   = Math.round((d.profit / maxP) * 80);
+    const col    = d.mPct >= 50 ? 'var(--secondary)' : 'var(--primary)';
+    return `<tr>
+      <td class="${rnkCls}" style="font-weight:700;">${i + 1}</td>
+      <td style="font-weight:600;">${d.p}</td>
+      <td style="color:var(--muted);font-size:11px;">${d.cat}</td>
+      <td>${fmtRp(d.rev)}</td>
+      <td style="color:var(--secondary);font-weight:600;">${fmtRp(d.profit)}</td>
+      <td>${fmtN(d.qty)}</td>
+      <td>${fmtRp(d.avgM)}</td>
+      <td style="color:${col};font-weight:600;">${d.mPct.toFixed(1)}%</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:${barW}px;background:${col};"></div></div></td>
+    </tr>`;
+  }).join('');
+
+  setText('capTable',
+    data.length + ' produk dalam periode ini  |  ' +
+    'Profit tertinggi: ' + data[0].p + '  |  ' +
+    'Total profit: ' + fmtRp(data.reduce((s,d) => s+d.profit, 0))
+  );
+}
+
+/* =========================================================
+   RENDER ALL
+   ========================================================= */
+function renderAll() {
+  const rows = ACT_ROWS;
+  if (!rows.length) {
+    ['cTrend','cMonthly','cSeasonal','cTopQty','cTopProfit','cMargin','cCategory','cScatter'].forEach(id => {
+      noData(id, 'Tidak ada data untuk filter ini');
+    });
+    renderKPI([]);
+    return;
+  }
+  renderKPI(rows);
+  renderTrend(rows);
+  renderMonthly(rows);
+  renderSeasonal(rows);
+  renderTopQty(rows);
+  renderTopProfit(rows);
+  renderMargin(rows);
+  renderCategory(rows);
+  renderScatter(rows, SCATTER_PERIOD);
+  renderTable(rows);
+}
+
+/* =========================================================
+   BRANCH BUTTONS
+   ========================================================= */
+function setupBranches(rows) {
+  const branches = [...new Set(rows.map(r => r.lokasi_cabang))].sort();
+  const wrap = document.getElementById('branchWrap');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+
+  const all = document.createElement('button');
+  all.className = 'btn-branch active';
+  all.dataset.branch = 'all';
+  all.textContent = 'Semua Cabang';
+  wrap.appendChild(all);
+
+  branches.forEach(b => {
+    const btn = document.createElement('button');
+    btn.className = 'btn-branch';
+    btn.dataset.branch = b;
+    btn.textContent = b;
+    wrap.appendChild(btn);
+  });
+
+  wrap.addEventListener('click', e => {
+    const btn = e.target.closest('.btn-branch');
+    if (!btn) return;
+    wrap.querySelectorAll('.btn-branch').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilters();
+  });
+}
+
+/* =========================================================
+   SCATTER FILTER PILLS
+   ========================================================= */
+function setupScatterFilter(rows) {
+  const ctrl = document.getElementById('scatterCtrl');
+  if (!ctrl) return;
+  ctrl.addEventListener('click', e => {
+    const pill = e.target.closest('.scatter-pill');
+    if (!pill) return;
+    ctrl.querySelectorAll('.scatter-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    SCATTER_PERIOD = parseInt(pill.dataset.period, 10);
+    renderScatter(ACT_ROWS, SCATTER_PERIOD);
+    setText('capScatter', '');
+    // re-render with new period
+    renderScatter(ACT_ROWS, SCATTER_PERIOD);
+  });
+}
+
+/* =========================================================
+   RESIZE HANDLER
+   ========================================================= */
+let _resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(_resizeTimer);
+  _resizeTimer = setTimeout(() => { if (ACT_ROWS.length) renderAll(); }, 150);
+});
+
+/* =========================================================
+   INIT
+   ========================================================= */
+async function init() {
+  const badge = document.getElementById('statusBadge');
+
+  let rows;
+  try {
+    if (badge) badge.textContent = 'Memuat JSON...';
+    const res = await fetch('penjualan_farmasi_2025.json');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    rows = await res.json();
+    if (!Array.isArray(rows) || !rows.length) throw new Error('Empty');
+    if (badge) badge.textContent = fmtN(rows.length) + ' transaksi (JSON)';
+  } catch (_) {
+    rows = makeDummy();
+    if (badge) badge.textContent = fmtN(rows.length) + ' transaksi (dummy)';
+  }
+
+  ALL_ROWS = rows;
+  ACT_ROWS = rows;
+
+  // Set date bounds
+  const maxDate = rows.reduce((m, r) => r.tanggal > m ? r.tanggal : m, '');
+  const minDate = rows.reduce((m, r) => !m || r.tanggal < m ? r.tanggal : m, '');
+  const df = document.getElementById('dateFrom');
+  const dt = document.getElementById('dateTo');
+  if (df && dt) {
+    df.min = dt.min = minDate;
+    df.max = dt.max = maxDate;
+    df.value = minDate;
+    dt.value = maxDate;
+  }
+
+  // Controls
+  const rangeSelect  = document.getElementById('rangeSelect');
+  const customGroup  = document.getElementById('customGroup');
+  if (rangeSelect && customGroup) {
+    rangeSelect.addEventListener('change', () => {
+      customGroup.style.display = rangeSelect.value === 'custom' ? 'flex' : 'none';
+      if (rangeSelect.value !== 'custom') applyFilters();
+    });
+  }
+  if (df) df.addEventListener('change', () => { if (rangeSelect.value === 'custom') applyFilters(); });
+  if (dt) dt.addEventListener('change', () => { if (rangeSelect.value === 'custom') applyFilters(); });
+
+  setupBranches(rows);
+  setupScatterFilter(rows);
+  applyFilters();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
